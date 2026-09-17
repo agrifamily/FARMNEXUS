@@ -1,1146 +1,1135 @@
 /* =====================================================
-   FARMSYNC JAVASCRIPT
+   FARMSYNC
+   Farm to Family
+   Complete Frontend Demo
 ===================================================== */
 
 
-/* =====================================================
-   GLOBAL DATA
-===================================================== */
+/* ================= GLOBAL DATA ================= */
 
-let demand = 78;
+let demand = 780;
 
-let produceData =
-  JSON.parse(
-    localStorage.getItem("farmsyncProduce")
-  ) || [];
-
-
-const sampleProduce = [
-
-  {
-    name: "Tomato",
-    farmer: "Arun Kumar",
-    location: "Pollachi",
-    price: 28,
-    quality: "Grade A",
-    quantity: 40
-  },
-
-  {
-    name: "Onion",
-    farmer: "Priya",
-    location: "Udumalpet",
-    price: 31,
-    quality: "Grade A",
-    quantity: 35
-  },
-
-  {
-    name: "Carrot",
-    farmer: "Kumar",
-    location: "Ooty",
-    price: 42,
-    quality: "Premium",
-    quantity: 25
-  },
-
-  {
-    name: "Coconut",
-    farmer: "Suresh",
-    location: "Kinathukadavu",
-    price: 35,
-    quality: "Grade A",
-    quantity: 30
-  },
-
-  {
-    name: "Potato",
-    farmer: "Meena",
-    location: "Mettupalayam",
-    price: 29,
-    quality: "Grade A",
-    quantity: 50
-  }
-
-];
-
-
-const farmers = [
-
-  {
-    name: "Arun Kumar",
-    location: "Pollachi",
-    score: 96,
-    quantity: 40,
-    quality: "Grade A"
-  },
-
-  {
-    name: "Priya",
-    location: "Udumalpet",
-    score: 91,
-    quantity: 35,
-    quality: "Grade A"
-  },
-
-  {
-    name: "Kumar",
-    location: "Coimbatore",
-    score: 87,
-    quantity: 25,
-    quality: "Premium"
-  },
-
-  {
-    name: "Suresh",
-    location: "Kinathukadavu",
-    score: 82,
-    quantity: 30,
-    quality: "Grade A"
-  }
-
-];
-
-
-/* =====================================================
-   ENTRY SCREEN
-===================================================== */
-
-function enterFarmSync(){
-
-  const entry =
-    document.getElementById("entryScreen");
-
-  entry.style.opacity = "0";
-
-  setTimeout(function(){
-
-    entry.style.display = "none";
-
-    document.getElementById("app").style.display =
-      "block";
-
-    window.scrollTo({
-      top:0,
-      behavior:"smooth"
-    });
-
-  },900);
-
-}
-
-
-/* =====================================================
-   PAGE NAVIGATION
-===================================================== */
-
-function showPage(pageName, button){
-
-  const pages =
-    document.querySelectorAll(".page");
-
-  pages.forEach(function(page){
-
-    page.classList.add("hidden");
-
-  });
-
-
-  const selected =
-    document.getElementById(pageName);
-
-  if(selected){
-
-    selected.classList.remove("hidden");
-
-  }
-
-
-  const buttons =
-    document.querySelectorAll(".navBtn");
-
-  buttons.forEach(function(btn){
-
-    btn.classList.remove("active");
-
-  });
-
-
-  if(button){
-
-    button.classList.add("active");
-
-  }
-
-  window.scrollTo({
-    top:0,
-    behavior:"smooth"
-  });
-
-}
-
-
-function showPageByName(pageName){
-
-  const button =
-    Array.from(
-      document.querySelectorAll(".navBtn")
-    ).find(function(btn){
-
-      return btn.innerText
-        .toLowerCase()
-        .includes(pageName);
-
-    });
-
-
-  if(pageName === "farmer"){
-
-    showPage("farmer", button);
-
-  }
-
-  else if(pageName === "consumer"){
-
-    showPage("consumer", button);
-
-  }
-
-  else if(pageName === "orders"){
-
-    showPage("orders", button);
-
-  }
-
-}
-
-
-/* =====================================================
-   TOAST
-===================================================== */
-
-let toastTimer;
-
-
-function showToast(message){
-
-  const toast =
-    document.getElementById("toast");
-
-  toast.innerText = message;
-
-  toast.classList.add("show");
-
-  clearTimeout(toastTimer);
-
-  toastTimer =
-    setTimeout(function(){
-
-      toast.classList.remove("show");
-
-    },2600);
-
-}
-
-
-/* =====================================================
-   POWERPOOL
-===================================================== */
-
-function joinPowerPool(button){
-
-  button.innerText = "✓ JOINED";
-
-  button.style.background = "#4fa863";
-
-  showToast(
-    "⚡ Successfully joined the PowerPool!"
-  );
-
-}
-
-
-/* =====================================================
-   LIVE DEMAND
-===================================================== */
-
-function updateDemand(){
-
-  const change =
-    Math.floor(
-      Math.random() * 7
-    ) - 3;
-
-  demand += change;
-
-  if(demand < 60){
-
-    demand = 60;
-
-  }
-
-  if(demand > 96){
-
-    demand = 96;
-
-  }
-
-
-  const bar =
-    document.getElementById("demandBar");
-
-  const text =
-    document.getElementById("demandText");
-
-  const value =
-    document.getElementById("demandValue");
-
-
-  if(bar){
-
-    bar.style.width =
-      demand + "%";
-
-  }
-
-  if(text){
-
-    text.innerText =
-      demand + "%";
-
-  }
-
-  if(value){
-
-    value.innerText =
-      demand + "%";
-
-  }
-
-}
-
-
-setInterval(
-  updateDemand,
-  3000
+let produceData = JSON.parse(
+    localStorage.getItem("farmsyncProduce") || "null"
 );
 
 
-/* =====================================================
-   ADD PRODUCE
-===================================================== */
+/* ================= SAMPLE DATA ================= */
 
-function addProduce(){
+const sampleProduce = [
 
-  const name =
-    document
-      .getElementById("produceName")
-      .value
-      .trim();
+    {
+        id: 1,
+        produce: "Tomato",
+        emoji: "🍅",
+        farmer: "Arun Kumar",
+        location: "Pollachi",
+        quantity: 60,
+        price: 27,
+        quality: "Premium"
+    },
 
-  const qty =
-    Number(
-      document
-        .getElementById("produceQty")
-        .value
-    );
+    {
+        id: 2,
+        produce: "Tomato",
+        emoji: "🍅",
+        farmer: "Priya",
+        location: "Udumalpet",
+        quantity: 40,
+        price: 28,
+        quality: "Premium"
+    },
 
-  const price =
-    Number(
-      document
-        .getElementById("producePrice")
-        .value
-    );
+    {
+        id: 3,
+        produce: "Carrot",
+        emoji: "🥕",
+        farmer: "Kumar",
+        location: "Ooty",
+        quantity: 85,
+        price: 42,
+        quality: "Premium"
+    },
 
-  const location =
-    document
-      .getElementById("produceLocation")
-      .value
-      .trim();
+    {
+        id: 4,
+        produce: "Onion",
+        emoji: "🧅",
+        farmer: "Suresh",
+        location: "Kinathukadavu",
+        quantity: 100,
+        price: 32,
+        quality: "Good"
+    },
 
-  const quality =
-    document
-      .getElementById("produceQuality")
-      .value;
+    {
+        id: 5,
+        produce: "Cabbage",
+        emoji: "🥬",
+        farmer: "Meena",
+        location: "Mettupalayam",
+        quantity: 75,
+        price: 25,
+        quality: "Good"
+    }
 
-
-  if(
-    !name ||
-    !qty ||
-    !price ||
-    !location
-  ){
-
-    showToast(
-      "⚠️ Please fill all produce details."
-    );
-
-    return;
-
-  }
-
-
-  const newProduce = {
-
-    id:Date.now(),
-
-    name:name,
-
-    quantity:qty,
-
-    price:price,
-
-    location:location,
-
-    quality:quality,
-
-    date:
-      new Date().toLocaleDateString()
-
-  };
+];
 
 
-  produceData.push(newProduce);
-
-
-  localStorage.setItem(
-    "farmsyncProduce",
-    JSON.stringify(produceData)
-  );
-
-
-  document
-    .getElementById("produceName")
-    .value = "";
-
-  document
-    .getElementById("produceQty")
-    .value = "";
-
-  document
-    .getElementById("producePrice")
-    .value = "";
-
-  document
-    .getElementById("produceLocation")
-    .value = "";
-
-
-  renderProduce();
-
-  showToast(
-    "🌱 Produce added successfully!"
-  );
-
+if (!Array.isArray(produceData)) {
+    produceData = sampleProduce;
 }
 
 
-/* =====================================================
-   RENDER FARMER PRODUCE
-===================================================== */
+/* ================= FARMER MATCH DATA ================= */
 
-function renderProduce(){
+const farmers = [
 
-  const list =
-    document.getElementById(
-      "produceList"
-    );
+    {
+        name: "Arun Kumar",
+        location: "Pollachi",
+        produce: "Tomato",
+        quantity: 60,
+        price: 27,
+        quality: "Premium",
+        score: 96
+    },
 
-  if(!list){
+    {
+        name: "Priya",
+        location: "Udumalpet",
+        produce: "Tomato",
+        quantity: 40,
+        price: 28,
+        quality: "Premium",
+        score: 91
+    },
 
-    return;
+    {
+        name: "Kumar",
+        location: "Ooty",
+        produce: "Carrot",
+        quantity: 85,
+        price: 42,
+        quality: "Premium",
+        score: 87
+    },
 
-  }
+    {
+        name: "Suresh",
+        location: "Kinathukadavu",
+        produce: "Onion",
+        quantity: 100,
+        price: 32,
+        quality: "Good",
+        score: 82
 
+    }
 
-  list.innerHTML = "";
-
-
-  if(produceData.length === 0){
-
-    list.innerHTML = `
-
-      <div class="panel">
-
-        <h3>No produce listed yet.</h3>
-
-        <p style="margin-top:6px;color:#718078">
-          Add your first produce above.
-        </p>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  produceData.forEach(function(item){
-
-    list.innerHTML += `
-
-      <div class="produceItem">
-
-        <div>
-
-          <h3>
-            🌾 ${escapeHTML(item.name)}
-          </h3>
-
-          <p>
-            📦 ${item.quantity} kg
-            &nbsp; • &nbsp;
-            💰 ₹${item.price}/kg
-            <br>
-
-            📍 ${escapeHTML(item.location)}
-            &nbsp; • &nbsp;
-            ⭐ ${escapeHTML(item.quality)}
-          </p>
-
-        </div>
-
-        <span class="activeBadge">
-          ACTIVE
-        </span>
-
-      </div>
-
-    `;
-
-  });
-
-}
+];
 
 
-/* =====================================================
-   SEARCH
-===================================================== */
+/* ================= PAGE NAVIGATION ================= */
 
-function searchProduce(){
+function showPage(pageName) {
 
-  const inputElement =
-    document.getElementById(
-      "searchInput"
-    );
+    const pages = document.querySelectorAll(".page");
 
-  const results =
-    document.getElementById(
-      "searchResults"
-    );
-
-  if(!inputElement || !results){
-
-    return;
-
-  }
+    pages.forEach(function(page) {
+        page.classList.remove("active-page");
+    });
 
 
-  const query =
-    inputElement.value
-      .toLowerCase()
-      .trim();
+    const selectedPage =
+        document.getElementById(pageName);
+
+    if (selectedPage) {
+        selectedPage.classList.add("active-page");
+    }
 
 
-  const filtered =
-    sampleProduce.filter(function(item){
+    const buttons =
+        document.querySelectorAll(".nav-btn");
 
-      return (
+    buttons.forEach(function(button) {
 
-        item.name
-          .toLowerCase()
-          .includes(query)
+        button.classList.remove("active");
 
-        ||
-
-        item.location
-          .toLowerCase()
-          .includes(query)
-
-        ||
-
-        item.farmer
-          .toLowerCase()
-          .includes(query)
-
-      );
+        if (
+            button.getAttribute("data-page")
+            === pageName
+        ) {
+            button.classList.add("active");
+        }
 
     });
 
 
-  results.innerHTML = "";
-
-
-  if(filtered.length === 0){
-
-    results.innerHTML = `
-
-      <div class="searchItem">
-
-        <div>
-          No matching produce found.
-        </div>
-
-      </div>
-
-    `;
-
-    return;
-
-  }
-
-
-  filtered.forEach(function(item){
-
-    results.innerHTML += `
-
-      <div class="searchItem">
-
-        <div>
-
-          <strong>
-            🌾 ${escapeHTML(item.name)}
-          </strong>
-
-          <small>
-            👨‍🌾 ${escapeHTML(item.farmer)}
-            <br>
-            📍 ${escapeHTML(item.location)}
-            <br>
-            ⭐ ${escapeHTML(item.quality)}
-            • 📦 ${item.quantity} kg available
-          </small>
-
-        </div>
-
-        <div class="searchPrice">
-          ₹${item.price}/kg
-        </div>
-
-      </div>
-
-    `;
-
-  });
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
 
 }
 
 
-/* =====================================================
-   FARMER MATCHING
-===================================================== */
-
-function renderFarmerMatches(){
-
-  const box =
-    document.getElementById(
-      "farmerMatches"
-    );
-
-  if(!box){
-
-    return;
-
-  }
+function showPageByName(pageName) {
+    showPage(pageName);
+}
 
 
-  box.innerHTML = "";
+/* ================= ENTER FARMSYNC ================= */
+
+function enterFarmSync() {
+
+    const entryScreen =
+        document.getElementById("entryScreen");
+
+    const app =
+        document.getElementById("app");
 
 
-  farmers.forEach(function(farmer){
-
-    box.innerHTML += `
-
-      <div class="matchItem">
-
-        <div class="matchTop">
-
-          <div>
-
-            <strong>
-              👨‍🌾 ${escapeHTML(farmer.name)}
-            </strong>
-
-            <div class="matchLocation">
-              📍 ${escapeHTML(farmer.location)}
-              • 📦 ${farmer.quantity} kg
-            </div>
-
-          </div>
-
-          <div class="matchScore">
-            ${farmer.score}%
-          </div>
-
-        </div>
+    if (!entryScreen || !app) {
+        console.log("Entry/App element missing");
+        return;
+    }
 
 
-        <div class="matchProgress">
-
-          <div
-            style="width:${farmer.score}%">
-          </div>
-
-        </div>
+    entryScreen.style.opacity = "0";
 
 
-        <div class="matchTags">
+    setTimeout(function() {
 
-          <span class="matchTag">
-            ✓ Location
-          </span>
+        entryScreen.style.display = "none";
 
-          <span class="matchTag">
-            ✓ Quality
-          </span>
+        app.style.display = "block";
 
-          <span class="matchTag">
-            ✓ Price
-          </span>
+        window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+        });
 
-          <span class="matchTag">
-            ✓ Quantity
-          </span>
-
-        </div>
-
-      </div>
-
-    `;
-
-  });
+    }, 700);
 
 }
 
 
-/* =====================================================
-   FAIR PRICE CALCULATOR
-===================================================== */
+/* ================= TOAST ================= */
 
-function calculateFairPrice(){
+function showToast(message) {
 
-  const market =
-    Number(
-      document.getElementById(
-        "marketPrice"
-      ).value
-    );
+    const toast =
+        document.getElementById("toast");
 
-  const farmer =
-    Number(
-      document.getElementById(
-        "farmerPrice"
-      ).value
-    );
-
-  const quantity =
-    Number(
-      document.getElementById(
-        "orderQty"
-      ).value
-    );
+    const toastMessage =
+        document.getElementById("toastMessage");
 
 
-  if(
-    market <= 0 ||
-    farmer <= 0 ||
-    quantity <= 0
-  ){
+    if (!toast || !toastMessage) {
+        return;
+    }
+
+
+    toastMessage.textContent = message;
+
+    toast.classList.add("show");
+
+
+    setTimeout(function() {
+
+        toast.classList.remove("show");
+
+    }, 3000);
+
+}
+
+
+/* ================= POWERPOOL ================= */
+
+function joinPowerPool() {
 
     showToast(
-      "⚠️ Enter valid price and quantity."
+        "You joined the Tomato PowerPool successfully!"
     );
-
-    return;
-
-  }
-
-
-  const total =
-    farmer * quantity;
-
-  const marketTotal =
-    market * quantity;
-
-  const saving =
-    marketTotal - total;
-
-  const savingPercent =
-    (
-      saving /
-      marketTotal
-    ) * 100;
-
-
-  const result =
-    document.getElementById(
-      "priceResult"
-    );
-
-
-  result.innerHTML = `
-
-    <div class="priceResultBox">
-
-      <h3>
-        ✓ Fair Price Result
-      </h3>
-
-      <p>
-        Farmer direct value:
-        <strong>
-          ₹${total.toFixed(0)}
-        </strong>
-      </p>
-
-      <p>
-        Estimated consumer saving:
-        <strong>
-          ₹${Math.max(saving,0).toFixed(0)}
-        </strong>
-      </p>
-
-      <p>
-        Direct-market difference:
-        <strong>
-          ${Math.max(savingPercent,0).toFixed(1)}%
-        </strong>
-      </p>
-
-    </div>
-
-  `;
-
-
-  showToast(
-    "💰 Fair price calculated!"
-  );
 
 }
 
 
-/* =====================================================
-   SMART ORDER
-===================================================== */
+/* ================= LIVE DEMAND ================= */
 
-function createSmartOrder(){
+function updateDemand() {
 
-  const orderNumber =
-    "FS" +
-    Math.floor(
-      1000 +
-      Math.random() * 9000
-    );
+    const change =
+        Math.floor(Math.random() * 15) - 5;
+
+    demand += change;
 
 
-  const order = {
+    if (demand < 700) {
+        demand = 700;
+    }
 
-    id:orderNumber,
-
-    product:"Tomato",
-
-    quantity:100,
-
-    total:2800,
-
-    status:"In Transit",
-
-    created:
-      new Date().toLocaleString()
-
-  };
+    if (demand > 950) {
+        demand = 950;
+    }
 
 
-  localStorage.setItem(
-    "farmsyncLastOrder",
-    JSON.stringify(order)
-  );
+    const demandValue =
+        document.getElementById("demandValue");
+
+    const demandMeter =
+        document.getElementById("demandMeter");
+
+    const demandPercent =
+        document.getElementById("demandPercent");
 
 
-  const orderId =
-    document.getElementById(
-      "orderId"
-    );
-
-  if(orderId){
-
-    orderId.innerText =
-      orderNumber;
-
-  }
+    if (demandValue) {
+        demandValue.textContent = demand;
+    }
 
 
-  showToast(
-    "🚀 Smart order created successfully!"
-  );
+    const percent =
+        Math.round((demand / 1000) * 100);
 
 
-  setTimeout(function(){
+    if (demandMeter) {
+        demandMeter.style.width =
+            percent + "%";
+    }
 
-    showPageByName("orders");
 
-  },1000);
+    if (demandPercent) {
+        demandPercent.textContent =
+            percent + "%";
+    }
 
 }
 
 
-/* =====================================================
-   SMART ALERT
-===================================================== */
+/* ================= ADD PRODUCE ================= */
 
-function enableAlerts(){
+function addProduce(event) {
 
-  localStorage.setItem(
-    "farmsyncAlerts",
-    "enabled"
-  );
+    event.preventDefault();
 
-  showToast(
-    "🔔 Smart demand alerts enabled!"
-  );
+
+    const name =
+        document.getElementById("produceName").value;
+
+    const quantity =
+        Number(
+            document.getElementById("produceQuantity").value
+        );
+
+    const price =
+        Number(
+            document.getElementById("producePrice").value
+        );
+
+    const farmer =
+        document.getElementById("farmerName").value;
+
+    const location =
+        document.getElementById("produceLocation").value;
+
+    const quality =
+        document.getElementById("produceQuality").value;
+
+
+    if (
+        !name ||
+        !quantity ||
+        !price ||
+        !farmer ||
+        !location
+    ) {
+
+        showToast(
+            "Please fill all required fields."
+        );
+
+        return;
+    }
+
+
+    const emojiMap = {
+
+        Tomato: "🍅",
+        Carrot: "🥕",
+        Onion: "🧅",
+        Potato: "🥔",
+        Cabbage: "🥬",
+        Brinjal: "🍆"
+
+    };
+
+
+    const newProduce = {
+
+        id: Date.now(),
+
+        produce: name,
+
+        emoji:
+            emojiMap[name] || "🌱",
+
+        farmer: farmer,
+
+        location: location,
+
+        quantity: quantity,
+
+        price: price,
+
+        quality: quality
+
+    };
+
+
+    produceData.unshift(newProduce);
+
+
+    localStorage.setItem(
+        "farmsyncProduce",
+        JSON.stringify(produceData)
+    );
+
+
+    renderProduce();
+
+    searchProduce();
+
+
+    document
+        .getElementById("produceForm")
+        .reset();
+
+
+    showToast(
+        `${name} successfully listed!`
+    );
 
 }
 
 
-/* =====================================================
-   PRICE CHART
-===================================================== */
+/* ================= RENDER FARMER PRODUCE ================= */
 
-function createPriceChart(){
+function renderProduce() {
 
-  const canvas =
-    document.getElementById(
-      "priceChart"
+    const container =
+        document.getElementById("produceList");
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (produceData.length === 0) {
+
+        container.innerHTML = `
+            <div class="panel">
+                No produce listed yet.
+            </div>
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        produceData.map(function(item) {
+
+            return `
+
+                <div class="produce-card">
+
+                    <div class="produce-image">
+                        ${escapeHTML(item.emoji)}
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(item.produce)}
+                    </h3>
+
+                    <p>
+                        👨‍🌾 ${escapeHTML(item.farmer)}
+                    </p>
+
+                    <p>
+                        📍 ${escapeHTML(item.location)}
+                    </p>
+
+                    <p>
+                        📦 ${item.quantity} kg available
+                    </p>
+
+                    <div class="produce-price">
+                        ₹${item.price}/kg
+                    </div>
+
+                    <span class="quality">
+                        ⭐ ${escapeHTML(item.quality)}
+                    </span>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ================= CONSUMER SEARCH ================= */
+
+function searchProduce() {
+
+    const container =
+        document.getElementById("consumerProduce");
+
+
+    if (!container) {
+        return;
+    }
+
+
+    const input =
+        document.getElementById("searchInput");
+
+
+    const query =
+        input
+            ? input.value.toLowerCase().trim()
+            : "";
+
+
+    const filtered =
+        produceData.filter(function(item) {
+
+            if (!query) {
+                return true;
+            }
+
+
+            return (
+
+                item.produce
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                item.farmer
+                    .toLowerCase()
+                    .includes(query)
+
+                ||
+
+                item.location
+                    .toLowerCase()
+                    .includes(query)
+
+            );
+
+        });
+
+
+    if (filtered.length === 0) {
+
+        container.innerHTML = `
+
+            <div class="panel">
+
+                <h3>No matching produce found.</h3>
+
+                <p>
+                    Try another produce or location.
+                </p>
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    container.innerHTML =
+        filtered.map(function(item) {
+
+            return `
+
+                <div class="produce-card">
+
+                    <div class="produce-image">
+                        ${escapeHTML(item.emoji)}
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(item.produce)}
+                    </h3>
+
+                    <p>
+                        👨‍🌾 ${escapeHTML(item.farmer)}
+                    </p>
+
+                    <p>
+                        📍 ${escapeHTML(item.location)}
+                    </p>
+
+                    <p>
+                        📦 ${item.quantity} kg available
+                    </p>
+
+                    <div class="produce-price">
+                        ₹${item.price}/kg
+                    </div>
+
+                    <span class="quality">
+                        ⭐ ${escapeHTML(item.quality)}
+                    </span>
+
+                    <br><br>
+
+                    <button
+                        class="primary-btn"
+                        onclick="selectProduce('${escapeHTML(item.produce)}')">
+
+                        🛒 Buy Produce
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ================= SELECT PRODUCE ================= */
+
+function selectProduce(produce) {
+
+    showToast(
+        `${produce} selected. Smart matching started!`
     );
 
-  if(!canvas){
 
-    return;
+    setTimeout(function() {
 
-  }
+        showPage("consumer");
+
+    }, 300);
+
+}
 
 
-  new Chart(
-    canvas.getContext("2d"),
-    {
+/* ================= FARMER MATCHING ================= */
 
-      type:"line",
+function renderFarmerMatches() {
 
-      data:{
+    const container =
+        document.getElementById("farmerMatches");
 
-        labels:[
-          "Sep 10",
-          "Sep 11",
-          "Sep 12",
-          "Sep 13",
-          "Sep 14",
-          "Sep 15",
-          "Sep 16"
+
+    if (!container) {
+        return;
+    }
+
+
+    container.innerHTML =
+        farmers.map(function(farmer) {
+
+            return `
+
+                <div class="match-card">
+
+                    <div class="match-score">
+                        ${farmer.score}%
+                    </div>
+
+                    <div class="farmer-avatar">
+                        👨‍🌾
+                    </div>
+
+                    <h3>
+                        ${escapeHTML(farmer.name)}
+                    </h3>
+
+                    <p>
+                        📍 ${escapeHTML(farmer.location)}
+                    </p>
+
+                    <p>
+                        🌱 ${escapeHTML(farmer.produce)}
+                    </p>
+
+                    <p>
+                        📦 ${farmer.quantity} kg
+                    </p>
+
+                    <p>
+                        💰 ₹${farmer.price}/kg
+                    </p>
+
+                    <div class="match-reasons">
+
+                        <span>📍 Location</span>
+
+                        <span>💰 Price</span>
+
+                        <span>⭐ Quality</span>
+
+                    </div>
+
+                    <button
+                        onclick="chooseFarmer('${escapeHTML(farmer.name)}')">
+
+                        Select Farmer
+
+                    </button>
+
+                </div>
+
+            `;
+
+        }).join("");
+
+}
+
+
+/* ================= CHOOSE FARMER ================= */
+
+function chooseFarmer(name) {
+
+    showToast(
+        `${name} matched successfully!`
+    );
+
+}
+
+
+/* ================= FAIR PRICE ================= */
+
+function calculateFairPrice() {
+
+    const produce =
+        document.getElementById("calcProduce").value;
+
+    const quantity =
+        Number(
+            document.getElementById("calcQuantity").value
+        );
+
+
+    if (!quantity || quantity <= 0) {
+
+        showToast(
+            "Enter a valid quantity."
+        );
+
+        return;
+    }
+
+
+    const marketPrices = {
+
+        Tomato: 27,
+        Carrot: 42,
+        Onion: 32,
+        Potato: 30
+
+    };
+
+
+    const basePrice =
+        marketPrices[produce] || 30;
+
+
+    const farmerShare =
+        basePrice * 0.86;
+
+
+    const logistics =
+        basePrice * 0.07;
+
+
+    const platform =
+        basePrice * 0.03;
+
+
+    const consumerPrice =
+        farmerShare +
+        logistics +
+        platform;
+
+
+    const total =
+        consumerPrice * quantity;
+
+
+    const result =
+        document.getElementById("fairPriceResult");
+
+
+    result.innerHTML = `
+
+        <strong>Fair Price Estimate</strong>
+
+        <br><br>
+
+        🌱 Farmer receives:
+        ₹${farmerShare.toFixed(2)}/kg
+
+        <br>
+
+        🚚 Logistics:
+        ₹${logistics.toFixed(2)}/kg
+
+        <br>
+
+        ⚙️ Platform:
+        ₹${platform.toFixed(2)}/kg
+
+        <br><br>
+
+        💰 Consumer Fair Price:
+        <strong>
+            ₹${consumerPrice.toFixed(2)}/kg
+        </strong>
+
+        <br>
+
+        📦 Total for ${quantity} kg:
+        <strong>
+            ₹${total.toFixed(2)}
+        </strong>
+
+    `;
+
+}
+
+
+/* ================= AUTO ORDER ================= */
+
+function createSmartOrder() {
+
+    const order = {
+
+        id:
+            "FS" +
+            Math.floor(
+                100000 +
+                Math.random() * 900000
+            ),
+
+        produce: "Tomato",
+
+        quantity: 100,
+
+        farmers: [
+
+            {
+                name: "Arun Kumar",
+                quantity: 60
+            },
+
+            {
+                name: "Priya",
+                quantity: 40
+            }
+
         ],
 
-        datasets:[
+        status: "In Transit"
 
-          {
+    };
 
-            label:"Tomato Price ₹/kg",
 
-            data:[
-              22,
-              24,
-              23,
-              25,
-              27,
-              26,
-              28
+    localStorage.setItem(
+        "farmsyncOrder",
+        JSON.stringify(order)
+    );
+
+
+    showToast(
+        "Smart order created! 2 farmers matched."
+    );
+
+
+    setTimeout(function() {
+
+        showPage("orders");
+
+        loadOrder();
+
+    }, 900);
+
+}
+
+
+/* ================= SMART ALERT ================= */
+
+function enableAlerts() {
+
+    showToast(
+        "Smart Demand Alerts enabled!"
+    );
+
+}
+
+
+/* ================= PRICE CHART ================= */
+
+function createPriceChart() {
+
+    const canvas =
+        document.getElementById("priceChart");
+
+
+    if (!canvas) {
+        return;
+    }
+
+
+    /* If Chart.js doesn't load, don't break the app */
+
+    if (typeof Chart === "undefined") {
+
+        const parent =
+            canvas.parentElement;
+
+        parent.innerHTML = `
+
+            <div style="
+                height:100%;
+                display:flex;
+                align-items:center;
+                justify-content:center;
+                color:#718078;
+                text-align:center;
+            ">
+
+                Price chart requires internet
+                connection for Chart.js.
+
+            </div>
+
+        `;
+
+        return;
+    }
+
+
+    new Chart(canvas, {
+
+        type: "line",
+
+        data: {
+
+            labels: [
+                "Mon",
+                "Tue",
+                "Wed",
+                "Thu",
+                "Fri",
+                "Sat",
+                "Sun"
             ],
 
-            tension:.4,
+            datasets: [
 
-            fill:true,
+                {
 
-            borderWidth:3,
+                    label: "Tomato ₹/kg",
 
-            pointRadius:4,
+                    data: [
+                        23,
+                        24,
+                        25,
+                        24,
+                        26,
+                        27,
+                        27
+                    ],
 
-            pointHoverRadius:7
+                    tension: .4,
 
-          }
+                    borderWidth: 3,
 
-        ]
+                    pointRadius: 4,
 
-      },
+                    fill: true
 
-      options:{
+                },
 
-        responsive:true,
+                {
 
-        maintainAspectRatio:false,
+                    label: "Carrot ₹/kg",
 
-        interaction:{
+                    data: [
+                        38,
+                        39,
+                        40,
+                        41,
+                        40,
+                        42,
+                        42
+                    ],
 
-          intersect:false,
+                    tension: .4,
 
-          mode:"index"
+                    borderWidth: 2,
+
+                    pointRadius: 3,
+
+                    fill: false
+
+                }
+
+            ]
 
         },
 
-        plugins:{
+        options: {
 
-          legend:{
+            responsive: true,
 
-            display:true
+            maintainAspectRatio: false,
 
-          }
+            plugins: {
 
-        },
+                legend: {
+                    position: "bottom"
+                }
 
-        scales:{
+            },
 
-          y:{
+            scales: {
 
-            beginAtZero:false,
+                y: {
 
-            ticks:{
+                    beginAtZero: false
 
-              callback:function(value){
-
-                return "₹" + value;
-
-              }
+                }
 
             }
 
-          }
-
         }
 
-      }
-
-    }
-
-  );
+    });
 
 }
 
 
-/* =====================================================
-   QR CODE
-===================================================== */
+/* ================= QR CODE ================= */
 
-function createQRCode(){
+function createQRCode() {
 
-  const qr =
-    document.getElementById(
-      "qrcode"
-    );
-
-  if(!qr){
-
-    return;
-
-  }
+    const container =
+        document.getElementById("qrcode");
 
 
-  qr.innerHTML = "";
+    if (!container) {
+        return;
+    }
 
 
-  if(typeof QRCode === "undefined"){
-
-    qr.innerHTML = `
-      <p style="color:#718078;font-size:12px">
-        QR library loading...
-      </p>
-    `;
-
-    return;
-
-  }
+    container.innerHTML = "";
 
 
-  new QRCode(
-    qr,
-    {
+    if (typeof QRCode === "undefined") {
 
-      text:
-        "FARMSYNC | Tomato | Arun Kumar | Pollachi | Grade A | Harvest 15 Sep 2026",
+        container.innerHTML = `
 
-      width:150,
+            <div style="
+                padding:20px;
+                color:#718078;
+            ">
 
-      height:150
+                QR preview requires internet
+                connection.
+
+            </div>
+
+        `;
+
+        return;
 
     }
-  );
+
+
+    new QRCode(container, {
+
+        text:
+            "FARMSYNC | Tomato | Pollachi | Farm to Family",
+
+        width: 150,
+
+        height: 150
+
+    });
 
 }
 
 
-/* =====================================================
-   LOAD SAVED ORDER
-===================================================== */
+/* ================= ORDER LOAD ================= */
 
-function loadOrder(){
-
-  const saved =
-    localStorage.getItem(
-      "farmsyncLastOrder"
-    );
-
-  if(!saved){
-
-    return;
-
-  }
-
-
-  try{
+function loadOrder() {
 
     const order =
-      JSON.parse(saved);
+        JSON.parse(
+            localStorage.getItem(
+                "farmsyncOrder"
+            ) || "null"
+        );
 
-    const orderId =
-      document.getElementById(
-        "orderId"
-      );
 
-    if(orderId){
-
-      orderId.innerText =
-        order.id;
-
+    if (!order) {
+        return;
     }
 
-  }
 
-  catch(error){
+    const orderTitle =
+        document.querySelector(
+            ".order-top h2"
+        );
 
-    console.log(
-      "Order data error"
-    );
 
-  }
+    if (orderTitle) {
+
+        orderTitle.textContent =
+            "#" + order.id;
+
+    }
 
 }
 
 
-/* =====================================================
-   SECURITY HELPER
-===================================================== */
+/* ================= SAFE HTML ================= */
 
-function escapeHTML(value){
+function escapeHTML(value) {
 
-  return String(value)
+    if (value === undefined || value === null) {
+        return "";
+    }
 
-    .replaceAll("&","&amp;")
 
-    .replaceAll("<","&lt;")
+    return String(value)
 
-    .replaceAll(">","&gt;")
+        .replace(/&/g, "&amp;")
 
-    .replaceAll('"',"&quot;")
+        .replace(/</g, "&lt;")
 
-    .replaceAll("'","&#039;");
+        .replace(/>/g, "&gt;")
+
+        .replace(/"/g, "&quot;")
+
+        .replace(/'/g, "&#039;");
 
 }
 
@@ -1149,21 +1138,71 @@ function escapeHTML(value){
    INITIALIZATION
 ===================================================== */
 
-window.addEventListener(
-  "load",
-  function(){
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
 
-    renderProduce();
 
-    renderFarmerMatches();
+        /* ENTRY BUTTON */
 
-    searchProduce();
+        const enterBtn =
+            document.getElementById("enterBtn");
 
-    createPriceChart();
 
-    createQRCode();
+        if (enterBtn) {
 
-    loadOrder();
+            enterBtn.addEventListener(
+                "click",
+                enterFarmSync
+            );
 
-  }
+        }
+
+
+        /* FORM */
+
+        const form =
+            document.getElementById(
+                "produceForm"
+            );
+
+
+        if (form) {
+
+            form.addEventListener(
+                "submit",
+                addProduce
+            );
+
+        }
+
+
+        /* RENDER */
+
+        renderProduce();
+
+        renderFarmerMatches();
+
+        searchProduce();
+
+        createPriceChart();
+
+        createQRCode();
+
+        loadOrder();
+
+
+        /* LIVE DEMAND */
+
+        setInterval(
+            updateDemand,
+            3000
+        );
+
+
+        console.log(
+            "FARMSYNC loaded successfully."
+        );
+
+    }
 );
