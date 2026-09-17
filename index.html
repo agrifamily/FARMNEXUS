@@ -1,1 +1,994 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+  <title>FARMSYNC | Farm to Family</title>
+
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Charts -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- QR -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+</head>
+
+<body>
+
+<!-- =====================================================
+     ENTRY SCREEN
+===================================================== -->
+
+<div id="entryScreen">
+
+  <div class="floating f1">🌱</div>
+  <div class="floating f2">🌾</div>
+  <div class="floating f3">🍅</div>
+  <div class="floating f4">🥕</div>
+  <div class="floating f5">🌿</div>
+
+  <div class="entryContent">
+
+    <div class="entryLogo">
+      <span>🌱</span>
+    </div>
+
+    <div class="entryTitle">
+      FARMSYNC
+    </div>
+
+    <div class="entryTagline">
+      Farm to Family
+    </div>
+
+    <p class="entryDescription">
+      Direct • Smart • Fair • Transparent
+    </p>
+
+    <button class="enterButton" onclick="enterFarmSync()">
+      ENTER FARMSYNC
+      <span>→</span>
+    </button>
+
+    <div class="loadingLine">
+      <span></span>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- =====================================================
+     MAIN APP
+===================================================== -->
+
+<div id="app">
+
+  <!-- HEADER -->
+
+  <header class="topHeader">
+
+    <div class="brandArea">
+
+      <div class="brandLogo">🌱</div>
+
+      <div>
+        <div class="brandName">FARMSYNC</div>
+        <div class="brandSub">FARM TO FAMILY</div>
+      </div>
+
+    </div>
+
+    <nav class="navigation">
+
+      <button class="navBtn active"
+              onclick="showPage('dashboard', this)">
+        🏠 Dashboard
+      </button>
+
+      <button class="navBtn"
+              onclick="showPage('farmer', this)">
+        👨‍🌾 Farmer
+      </button>
+
+      <button class="navBtn"
+              onclick="showPage('consumer', this)">
+        🛒 Consumer
+      </button>
+
+      <button class="navBtn"
+              onclick="showPage('orders', this)">
+        🚚 Orders
+      </button>
+
+    </nav>
+
+  </header>
+
+
+  <!-- =====================================================
+       CONTENT
+  ===================================================== -->
+
+  <main class="mainContainer">
+
+
+    <!-- =================================================
+         DASHBOARD
+    ================================================= -->
+
+    <section id="dashboard" class="page">
+
+      <div class="hero">
+
+        <div class="heroText">
+
+          <div class="heroBadge">
+            🚀 SMART AGRICULTURE MARKETPLACE
+          </div>
+
+          <h1>
+            From <span>Farm</span><br>
+            to <span>Family</span>
+          </h1>
+
+          <p>
+            Connecting farmers and consumers directly
+            through intelligent matching, fair pricing
+            and smart demand management.
+          </p>
+
+          <div class="heroButtons">
+
+            <button class="primaryBtn"
+                    onclick="showPageByName('farmer')">
+              👨‍🌾 Farmer Dashboard
+            </button>
+
+            <button class="lightBtn"
+                    onclick="showPageByName('consumer')">
+              🛒 Buy Produce
+            </button>
+
+          </div>
+
+        </div>
+
+        <div class="heroVisual">
+
+          <div class="farmCircle">
+            🌾
+          </div>
+
+          <div class="miniFloating m1">
+            🍅 ₹28/kg
+          </div>
+
+          <div class="miniFloating m2">
+            📈 +18%
+          </div>
+
+          <div class="miniFloating m3">
+            🚚 Live
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- STATS -->
+
+      <div class="statsGrid">
+
+        <div class="statCard">
+          <div class="statIcon">👨‍🌾</div>
+          <div>
+            <div class="statLabel">Active Farmers</div>
+            <div class="statNumber" id="farmerCount">128</div>
+          </div>
+        </div>
+
+        <div class="statCard">
+          <div class="statIcon">🛒</div>
+          <div>
+            <div class="statLabel">Consumers</div>
+            <div class="statNumber" id="consumerCount">342</div>
+          </div>
+        </div>
+
+        <div class="statCard">
+          <div class="statIcon">📦</div>
+          <div>
+            <div class="statLabel">Available Produce</div>
+            <div class="statNumber" id="produceCount">57</div>
+          </div>
+        </div>
+
+        <div class="statCard">
+          <div class="statIcon">🔄</div>
+          <div>
+            <div class="statLabel">Live Demand</div>
+            <div class="statNumber" id="demandValue">78%</div>
+          </div>
+        </div>
+
+      </div>
+
+
+      <!-- LIVE DEMAND + POWERPOOL -->
+
+      <div class="twoColumn">
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>🔄 Live Demand Meter</h2>
+              <p>Real-time consumer demand</p>
+            </div>
+
+            <div class="liveDot">
+              ● LIVE
+            </div>
+
+          </div>
+
+          <div class="demandProduct">
+
+            <div>
+              <strong>🍅 Tomato</strong>
+              <small>Current demand</small>
+            </div>
+
+            <strong id="demandText">78%</strong>
+
+          </div>
+
+          <div class="bigMeter">
+            <div id="demandBar" class="meterProgress"></div>
+          </div>
+
+          <div class="demandFooter">
+
+            <span>Low</span>
+
+            <span>Medium</span>
+
+            <span>High 🔥</span>
+
+          </div>
+
+          <div class="alertBox">
+            🔥 High demand detected — farmers can respond to
+            current consumer requirements.
+          </div>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>⚡ PowerPool</h2>
+              <p>Combine demand from consumers</p>
+            </div>
+
+            <div class="poolIcon">
+              ⚡
+            </div>
+
+          </div>
+
+          <div class="poolCard">
+
+            <div class="poolTop">
+              <strong>🍅 Tomato Pool</strong>
+              <span>73%</span>
+            </div>
+
+            <div class="smallMeter">
+              <div style="width:73%"></div>
+            </div>
+
+            <div class="poolInfo">
+              <span>Required: 100 kg</span>
+              <span>Joined: 73 kg</span>
+            </div>
+
+            <button class="poolButton"
+                    onclick="joinPowerPool(this)">
+              JOIN POWERPOOL
+            </button>
+
+          </div>
+
+
+          <div class="poolCard">
+
+            <div class="poolTop">
+              <strong>🧅 Onion Pool</strong>
+              <span>58%</span>
+            </div>
+
+            <div class="smallMeter">
+              <div style="width:58%"></div>
+            </div>
+
+            <div class="poolInfo">
+              <span>Required: 80 kg</span>
+              <span>Joined: 46 kg</span>
+            </div>
+
+            <button class="poolButton"
+                    onclick="joinPowerPool(this)">
+              JOIN POWERPOOL
+            </button>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- PRICE CHART -->
+
+      <div class="panel chartPanel">
+
+        <div class="panelHeader">
+
+          <div>
+            <h2>📈 Price Trend</h2>
+            <p>Tomato market price movement</p>
+          </div>
+
+          <div class="priceHighlight">
+            ₹28/kg
+            <small>Current Fair Price</small>
+          </div>
+
+        </div>
+
+        <div class="chartBox">
+          <canvas id="priceChart"></canvas>
+        </div>
+
+      </div>
+
+
+      <!-- SMART FEATURES -->
+
+      <h2 class="sectionTitle">
+        🚀 FARMSYNC Smart Features
+      </h2>
+
+      <div class="featureGrid">
+
+        <div class="featureCard">
+          <div class="featureIcon">💰</div>
+          <h3>Fair-Price Calculator</h3>
+          <p>
+            Transparent direct farmer-to-consumer pricing.
+          </p>
+        </div>
+
+        <div class="featureCard">
+          <div class="featureIcon">📦</div>
+          <h3>Auto Order Splitting</h3>
+          <p>
+            Automatically divide large orders between multiple farmers.
+          </p>
+        </div>
+
+        <div class="featureCard">
+          <div class="featureIcon">🔔</div>
+          <h3>Smart Demand Alert</h3>
+          <p>
+            Notify farmers when demand increases.
+          </p>
+        </div>
+
+        <div class="featureCard">
+          <div class="featureIcon">⭐</div>
+          <h3>Quality Matching</h3>
+          <p>
+            Match quality requirements with available produce.
+          </p>
+        </div>
+
+        <div class="featureCard">
+          <div class="featureIcon">📍</div>
+          <h3>Location Matching</h3>
+          <p>
+            Find nearby farmers and consumers for efficient delivery.
+          </p>
+        </div>
+
+        <div class="featureCard">
+          <div class="featureIcon">🤖</div>
+          <h3>AI Demand Forecast</h3>
+          <p>
+            Demo prediction of future consumer demand.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         FARMER
+    ================================================= -->
+
+    <section id="farmer" class="page hidden">
+
+      <div class="pageHero">
+
+        <div>
+          <div class="heroBadge">FARMER PORTAL</div>
+
+          <h1>👨‍🌾 Farmer Dashboard</h1>
+
+          <p>
+            Add your produce, monitor demand and connect
+            directly with consumers.
+          </p>
+        </div>
+
+        <div class="pageHeroIcon">
+          🌾
+        </div>
+
+      </div>
+
+
+      <div class="twoColumn">
+
+        <!-- ADD PRODUCE -->
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>➕ Add Produce</h2>
+              <p>List your farm produce</p>
+            </div>
+
+          </div>
+
+          <label>Produce Name</label>
+
+          <input id="produceName"
+                 type="text"
+                 placeholder="Example: Tomato">
+
+          <label>Quantity (kg)</label>
+
+          <input id="produceQty"
+                 type="number"
+                 placeholder="100">
+
+          <label>Price per kg</label>
+
+          <input id="producePrice"
+                 type="number"
+                 placeholder="28">
+
+          <label>Farm Location</label>
+
+          <input id="produceLocation"
+                 type="text"
+                 placeholder="Pollachi">
+
+          <label>Quality</label>
+
+          <select id="produceQuality">
+
+            <option>Grade A</option>
+            <option>Premium</option>
+            <option>Grade B</option>
+
+          </select>
+
+          <button class="primaryBtn fullBtn"
+                  onclick="addProduce()">
+            🌱 ADD PRODUCE
+          </button>
+
+        </div>
+
+
+        <!-- SMART ALERT -->
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>🔔 Smart Demand Alert</h2>
+              <p>AI-style market signal</p>
+            </div>
+
+          </div>
+
+          <div class="smartAlert">
+
+            <div class="alertIcon">
+              🔥
+            </div>
+
+            <div>
+
+              <strong>High Tomato Demand</strong>
+
+              <p>
+                Consumer demand increased by
+                <b>18%</b> in nearby PowerPools.
+              </p>
+
+            </div>
+
+          </div>
+
+          <div class="forecastBox">
+
+            <span>🤖 AI Demand Forecast</span>
+
+            <strong>+24%</strong>
+
+            <p>
+              Expected demand increase over the next 7 days.
+            </p>
+
+            <div class="bigMeter">
+              <div class="meterProgress forecastProgress"></div>
+            </div>
+
+          </div>
+
+          <button class="secondaryBtn fullBtn"
+                  onclick="enableAlerts()">
+            🔔 ENABLE SMART ALERTS
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- MY PRODUCE -->
+
+      <h2 class="sectionTitle">
+        📦 My Produce
+      </h2>
+
+      <div id="produceList"></div>
+
+    </section>
+
+
+    <!-- =================================================
+         CONSUMER
+    ================================================= -->
+
+    <section id="consumer" class="page hidden">
+
+      <div class="pageHero">
+
+        <div>
+
+          <div class="heroBadge">
+            CONSUMER PORTAL
+          </div>
+
+          <h1>🛒 Consumer Dashboard</h1>
+
+          <p>
+            Find fresh produce directly from farmers.
+          </p>
+
+        </div>
+
+        <div class="pageHeroIcon">
+          🛒
+        </div>
+
+      </div>
+
+
+      <!-- SEARCH -->
+
+      <div class="panel">
+
+        <div class="panelHeader">
+
+          <div>
+            <h2>🔎 Search Produce</h2>
+            <p>Search by product or location</p>
+          </div>
+
+        </div>
+
+        <input id="searchInput"
+               class="searchInput"
+               type="text"
+               placeholder="Search tomato, onion, carrot..."
+               oninput="searchProduce()">
+
+        <div id="searchResults"></div>
+
+      </div>
+
+
+      <!-- MATCHING -->
+
+      <div class="panel">
+
+        <div class="panelHeader">
+
+          <div>
+            <h2>⭐ Smart Farmer Matching</h2>
+
+            <p>
+              Matching based on price + location +
+              quality + quantity
+            </p>
+
+          </div>
+
+          <span class="aiBadge">
+            AI MATCH
+          </span>
+
+        </div>
+
+        <div id="farmerMatches"></div>
+
+      </div>
+
+
+      <div class="twoColumn">
+
+        <!-- AUTO SPLIT -->
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>📦 Auto Order Splitting</h2>
+              <p>100 kg Tomato requirement</p>
+            </div>
+
+          </div>
+
+          <div class="splitRow">
+
+            <div>
+              <strong>👨‍🌾 Arun</strong>
+              <small>Pollachi</small>
+            </div>
+
+            <b>40 kg</b>
+
+          </div>
+
+          <div class="splitRow">
+
+            <div>
+              <strong>👩‍🌾 Priya</strong>
+              <small>Udumalpet</small>
+            </div>
+
+            <b>35 kg</b>
+
+          </div>
+
+          <div class="splitRow">
+
+            <div>
+              <strong>👨‍🌾 Kumar</strong>
+              <small>Coimbatore</small>
+            </div>
+
+            <b>25 kg</b>
+
+          </div>
+
+          <div class="splitTotal">
+            Total matched: <b>100 kg</b>
+          </div>
+
+          <button class="primaryBtn fullBtn"
+                  onclick="createSmartOrder()">
+            🚀 CREATE SMART ORDER
+          </button>
+
+        </div>
+
+
+        <!-- PRICE CALCULATOR -->
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>💰 Fair-Price Calculator</h2>
+              <p>Transparent price calculation</p>
+            </div>
+
+          </div>
+
+          <label>Market Price / kg</label>
+
+          <input id="marketPrice"
+                 type="number"
+                 value="32">
+
+          <label>Farmer Direct Price / kg</label>
+
+          <input id="farmerPrice"
+                 type="number"
+                 value="28">
+
+          <label>Quantity (kg)</label>
+
+          <input id="orderQty"
+                 type="number"
+                 value="10">
+
+          <button class="primaryBtn fullBtn"
+                  onclick="calculateFairPrice()">
+            CALCULATE FAIR PRICE
+          </button>
+
+          <div id="priceResult"></div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+
+    <!-- =================================================
+         ORDERS
+    ================================================= -->
+
+    <section id="orders" class="page hidden">
+
+      <div class="pageHero">
+
+        <div>
+
+          <div class="heroBadge">
+            ORDER TRACKING
+          </div>
+
+          <h1>🚚 Delivery Tracking</h1>
+
+          <p>
+            Track your farm-to-family order.
+          </p>
+
+        </div>
+
+        <div class="pageHeroIcon">
+          🚚
+        </div>
+
+      </div>
+
+
+      <!-- ORDER -->
+
+      <div class="panel">
+
+        <div class="orderHeader">
+
+          <div>
+
+            <h2>
+              Order #<span id="orderId">FS1024</span>
+            </h2>
+
+            <p>
+              🍅 Tomato • 100 kg • ₹2,800
+            </p>
+
+          </div>
+
+          <span class="statusBadge">
+            IN TRANSIT
+          </span>
+
+        </div>
+
+
+        <div class="tracking">
+
+          <div class="trackLine"></div>
+
+          <div class="trackStep completed">
+
+            <div class="trackCircle">
+              ✓
+            </div>
+
+            <strong>Order</strong>
+            <small>Confirmed</small>
+
+          </div>
+
+          <div class="trackStep completed">
+
+            <div class="trackCircle">
+              ✓
+            </div>
+
+            <strong>Farm</strong>
+            <small>Collected</small>
+
+          </div>
+
+          <div class="trackStep completed">
+
+            <div class="trackCircle">
+              ✓
+            </div>
+
+            <strong>Packed</strong>
+            <small>Ready</small>
+
+          </div>
+
+          <div class="trackStep current">
+
+            <div class="trackCircle">
+              🚚
+            </div>
+
+            <strong>Transit</strong>
+            <small>On the way</small>
+
+          </div>
+
+          <div class="trackStep">
+
+            <div class="trackCircle">
+              5
+            </div>
+
+            <strong>Delivered</strong>
+            <small>Pending</small>
+
+          </div>
+
+        </div>
+
+
+        <div class="deliveryMessage">
+
+          🚚
+          <div>
+            <strong>Your order is on the way</strong>
+            <p>
+              Estimated delivery today at 6:30 PM.
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+
+      <!-- QR -->
+
+      <div class="twoColumn">
+
+        <div class="panel qrPanel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>🔐 QR Traceability</h2>
+
+              <p>
+                Verify produce source
+              </p>
+            </div>
+
+          </div>
+
+          <div id="qrcode"></div>
+
+          <p class="scanText">
+            Scan this QR code to verify
+            farmer and produce information.
+          </p>
+
+        </div>
+
+
+        <div class="panel">
+
+          <div class="panelHeader">
+
+            <div>
+              <h2>🌱 Produce Details</h2>
+              <p>Traceable farm information</p>
+            </div>
+
+          </div>
+
+          <div class="detailRow">
+            <span>Farmer</span>
+            <strong>Arun Kumar</strong>
+          </div>
+
+          <div class="detailRow">
+            <span>Location</span>
+            <strong>Pollachi, Tamil Nadu</strong>
+          </div>
+
+          <div class="detailRow">
+            <span>Produce</span>
+            <strong>🍅 Tomato</strong>
+          </div>
+
+          <div class="detailRow">
+            <span>Harvest</span>
+            <strong>15 Sep 2026</strong>
+          </div>
+
+          <div class="detailRow">
+            <span>Quality</span>
+            <strong>⭐ Grade A</strong>
+          </div>
+
+          <div class="verified">
+            ✓ VERIFIED FARM SOURCE
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!-- FOOTER -->
+
+  <footer>
+
+    <strong>🌱 FARMSYNC</strong>
+
+    <span>
+      Farm to Family • Smart Agriculture • Direct Marketplace
+    </span>
+
+  </footer>
+
+</div>
+
+
+<!-- TOAST -->
+
+<div id="toast"></div>
+
+
+<script src="script.js"></script>
+
+</body>
+</html>
